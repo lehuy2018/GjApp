@@ -1,0 +1,70 @@
+<window xmlns:n="native" xmlns:x="xhtml" xmlns:zk="zk"
+	id="wdn" border="normal" mode="modal" action="show: slideIn"
+	contentStyle="overflow:auto;" closable="true" title="${arg.save}"
+	onClose="@command('invokeGG', notify=vmArgs, detach=wdn, attr='targetQuery')"
+	whatever="@load(false,after='saveTheLoai') @converter('vn.toancauxanh.service.DetachConverter')"
+	viewModel="@id('vm') @init(arg.model)" validationMessages="@id('vmsgs')" width="800px"
+	form="@id('fx') @load(vm) @save(vm, before={'saveTheLoai'}) @validator(vm.validatorTheLoai)">
+		<zscript>
+			vmArgs = arg.get("vmArgs");
+			strSave = arg.get("save");
+			import java.awt.*;
+    		import java.awt.image.*;
+    		import java.awt.geom.*;
+			BufferedImage imagevar2 = new BufferedImage(400, 300, BufferedImage.TYPE_INT_ARGB); 
+		</zscript>
+		<div class="row box-body">
+				<div zclass="col-lg-8">
+					<div zclass="form-group">
+						<hlayout class="control-label">
+							<x:label>Tiêu đề<n:small class="required"> *</n:small></x:label>
+						</hlayout>
+						<vlayout>
+							<textbox class="form-control" width="100%" maxlength="255"
+								value="@load(vm.title) @save(vm.title, before={'saveTheLoai'}) @validator('vn.toancauxanh.vm.BaseValid', constraint='no empty')" />
+							<label zclass="error"
+								value="@load(vmsgs[self.previousSibling])" />
+						</vlayout>
+					</div>
+					<div zclass="form-group">
+						<x:label class="control-label">Mô tả</x:label>
+						<textbox class="form-control" rows="5" maxlength="255"
+							value="@bind(vm.description)" />
+					</div>
+					<div zclass="form-group">
+						<hlayout class="control-label">
+							<x:label>Liên kết<n:small class="required"> *</n:small></x:label>
+						</hlayout>
+						<vlayout>
+							<textbox class="form-control" width="100%" maxlength="255"
+								value="@load(vm.theloaiLink) @save(vm.theloaiLink, before={'saveTheLoai'}) @validator('vn.toancauxanh.vm.BaseValid', constraint='no empty')" />
+							<label zclass="error"
+								value="@load(vmsgs[self.previousSibling])" />
+						</vlayout>
+					</div>
+					<div zclass="form-group">
+						<div class="row">
+						<div class="col-sm-3 col-md-3 col-lg-3">
+							<checkbox  label="Áp dụng" checked="@bind(vm.checkApDung)" />
+						</div>
+						<div class="col-sm-9 col-md-9 col-lg-9">
+							<checkbox  label="Click để mở tab mới" checked="@bind(vm.newTab)" />
+						</div>
+						</div>
+					</div>
+				</div>
+			<!-- /.col-lg-12 -->
+		</div>
+		<div class="row box-footer">  		
+			<x:button style="margin-right: 10px;" class="btn btn-success" 
+			 	zk:if="${(vm.noId() and entry.quyen.theloai_them) or (!vm.noId() and entry.quyen.theloai_sua)}"
+				onClick="@command('saveTheLoai', list=vmArgs, wdn=wdn, attr='targetQuery')">
+				<n:i class="fa fa-save"></n:i>
+				Lưu 
+			</x:button>
+			<x:button class="btn btn-default" onClick="@command('invokeGG', notify=vmArgs, detach=wdn, attr='targetQuery')">
+				Hủy
+			</x:button>
+		</div>
+	</window>
+
